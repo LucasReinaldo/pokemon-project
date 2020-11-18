@@ -1,10 +1,24 @@
 import React from 'react';
+import GlobalStyle from './styles/global';
+
+import Pokemon from './pages/Pokemon';
+import Statistics from './components/Statistics';
+
+import { Container, LeftContainer, RightContainer } from './styles/styles';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>Hello there!</h1>
-    </div>
+    <>
+      <GlobalStyle />
+      <Container>
+        <LeftContainer>
+          <Statistics />
+        </LeftContainer>
+        <RightContainer>
+          <Pokemon />
+        </RightContainer>
+      </Container>
+    </>
   );
 };
 
