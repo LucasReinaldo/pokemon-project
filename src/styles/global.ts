@@ -64,12 +64,8 @@ export default createGlobalStyle`
     font: 1.6rem 'Roboto', sans-serif;
   }
 
-  h1 {
+  h1, h2, h3, h4, h5, h6, strong {
     font-family: 'Chakra Petch', sans-serif;
-    font-weight: 600;
-  }
-
-  h2, h3, h4, h5, h6, strong {
     font-weight: 600;
   }
 

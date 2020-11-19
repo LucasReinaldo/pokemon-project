@@ -28,7 +28,7 @@ export const CardStatsName = styled.div`
     font-weight: 600;
     letter-spacing: 1px;
     color: --primary-color;
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 `;
 

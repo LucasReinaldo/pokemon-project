@@ -20,10 +20,27 @@ export const Container = styled.div`
       text-align: center;
       text-transform: capitalize;
     }
+
+    img {
+      width: auto;
+    }
   }
 `;
 
 export const AbilitiesContainer = styled.div`
+  > div {
+    display: flex;
+    margin-top: 8px;
+  }
+`;
+
+export const EvolutionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 80%;
+  text-align: center;
+
   p {
     margin-top: 8px;
     text-transform: uppercase;
@@ -33,15 +50,16 @@ export const AbilitiesContainer = styled.div`
     font-weight: 600;
     letter-spacing: 1px;
     color: var(--gainsboro);
-
-    :not(:last-child):after {
-      content: '';
-      border: 2px solid var(--gainsboro);
-      margin: 8px;
-      border-radius: 50%;
-      background-color: none;
-    }
   }
+`;
+export const EvolvesFrom = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const EvolvesTo = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const StatsContainer = styled.div`
@@ -63,16 +81,6 @@ export const CardContainer = styled.div`
 export const PropertiesContainer = styled.div`
   > div {
     display: flex;
-    margin: 1.6rem auto;
-
-    span {
-      border: 1px solid #fff;
-      margin: 0 8px;
-    }
-
-    p {
-      font-weight: 500;
-      font-size: 1.8rem;
-    }
+    margin-top: 8px;
   }
 `;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 
 import { api } from '../../services/api';
+import Banners from '../Banners';
 
 import {
   Container,
@@ -29,7 +30,7 @@ const Pokemon: React.FC = () => {
   const [pokemon, setPokemon] = useState({} as PokemonProps);
 
   useEffect(() => {
-    api.get('pokemon/zubat').then((response) => {
+    api.get('pokemon/gloom').then((response) => {
       const { id, name, types, sprites } = response.data;
 
       setPokemon({
@@ -47,11 +48,11 @@ const Pokemon: React.FC = () => {
         <HeaderContainer>
           <h1>{pokemon.name}</h1>
           <TypeContainer>
-            {pokemon.types?.map(({ type }) => (
-              <div key={type.name}>
-                <p>{type.name}</p>
-              </div>
-            ))}
+            <div>
+              {pokemon.types?.map(({ type }) => (
+                <Banners key={type.name}>{type.name}</Banners>
+              ))}
+            </div>
           </TypeContainer>
           <span>{`#${pokemon.id}`}</span>
         </HeaderContainer>

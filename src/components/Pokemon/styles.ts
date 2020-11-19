@@ -74,24 +74,7 @@ export const ArrowContainer = styled.div`
 `;
 
 export const TypeContainer = styled.div`
-  div {
+  > div {
     display: inline-flex;
-
-    p {
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--poke-secondary-color);
-      background-color: var(--gainsboro);
-      padding: 4px;
-      border-radius: 4px;
-    }
-
-    :not(:last-child):after {
-      content: '';
-      border: 3px solid var(--gainsboro);
-      margin: auto 8px;
-      border-radius: 50%;
-    }
   }
 `;
