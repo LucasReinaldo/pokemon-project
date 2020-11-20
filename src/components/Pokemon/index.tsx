@@ -30,7 +30,7 @@ const Pokemon: React.FC = () => {
   const [pokemon, setPokemon] = useState({} as PokemonProps);
 
   useEffect(() => {
-    api.get('pokemon/gloom').then((response) => {
+    api.get('pokemon/vileplume').then((response) => {
       const { id, name, types, sprites } = response.data;
 
       setPokemon({

@@ -35,31 +35,10 @@ export const AbilitiesContainer = styled.div`
 `;
 
 export const EvolutionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 80%;
-  text-align: center;
-
-  p {
+  > div {
+    display: flex;
     margin-top: 8px;
-    text-transform: uppercase;
-    justify-content: center;
-    align-items: center;
-    display: inline-flex;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--gainsboro);
   }
-`;
-export const EvolvesFrom = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const EvolvesTo = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export const StatsContainer = styled.div`

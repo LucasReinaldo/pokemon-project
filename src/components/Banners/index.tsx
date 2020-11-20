@@ -3,7 +3,7 @@ import React from 'react';
 import { Description } from './styles';
 
 interface IBanners {
-  children: string;
+  children: string | undefined;
 }
 
 const Banners = ({ children }: IBanners) => {
