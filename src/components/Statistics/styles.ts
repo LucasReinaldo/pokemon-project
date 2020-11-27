@@ -38,6 +38,7 @@ export const EvolutionContainer = styled.div`
   > div {
     display: flex;
     margin-top: 8px;
+    justify-content: center;
   }
 `;
 

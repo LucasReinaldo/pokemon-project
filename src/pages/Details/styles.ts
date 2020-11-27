@@ -4,6 +4,7 @@ export const Container = styled.div`
   flex: 1;
   display: flex;
   height: 100vh;
+  padding: 24px;
   background: linear-gradient(
     -75deg,
     #0f1a20ff,

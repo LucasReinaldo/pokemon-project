@@ -1,11 +1,14 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Axios from 'axios';
 
-import Cards from '../Cards';
+import StatCard from '../StatCard';
 import Banners from '../Banners';
 
-import pokemonLogo from '../../assets/pokemon-logo.svg';
+import { parsedHeight } from '../../utils/parsedHeight';
+import { parsedWeight } from '../../utils/parsedWeight';
+
 import { api } from '../../services/api';
 
 import {
@@ -52,7 +55,10 @@ interface EvolutionChain {
 
 interface PokemonStats {
   id: number;
-  height: number;
+  height: {
+    measure: number | string;
+    converted: number | string;
+  };
   weight: number;
   stats: Stats[];
   abilities: {
@@ -63,14 +69,20 @@ interface PokemonStats {
   species: NameUrlProps;
 }
 
+interface RouteParams {
+  name: string;
+}
+
 const Statistics: React.FC = () => {
   const [pokedex, setPokedex] = useState({} as PokemonStats);
   const [speciesData, setSpeciesData] = useState({} as Species);
   const [evolutionData, setEvolutionData] = useState({} as EvolutionChain);
 
+  const { name: pokeName } = useParams() as RouteParams;
+
   useEffect(() => {
     const getPokemon = async () => {
-      const responsePokemon = await api.get('pokemon/vileplume');
+      const responsePokemon = await api.get(`pokemon/${pokeName}`);
       const {
         height,
         weight,
@@ -80,17 +92,20 @@ const Statistics: React.FC = () => {
         id,
       } = responsePokemon.data;
 
+      const pokeHeight = parsedHeight(height);
+      const pokeWeight = parsedWeight(weight);
+
       setPokedex({
-        height,
-        weight,
+        height: pokeHeight,
+        weight: pokeWeight,
         stats,
         abilities,
         id,
         species,
       });
 
-      const responseSpecies = await api.get<Species>(
-        `pokemon-species/${pokedex.id}`,
+      const responseSpecies = await Axios.get<Species>(
+        `${pokedex.species?.url}`,
       );
 
       const {
@@ -111,7 +126,12 @@ const Statistics: React.FC = () => {
     };
 
     getPokemon();
-  }, [pokedex.id, speciesData.evolution_chain?.url]);
+  }, [
+    pokeName,
+    pokedex.id,
+    pokedex.species?.url,
+    speciesData.evolution_chain?.url,
+  ]);
 
   const evolutionChain = evolutionData.chain?.evolves_to.map(
     ({ evolves_to, species: specie }) => {
@@ -130,12 +150,11 @@ const Statistics: React.FC = () => {
   return (
     <Container>
       <div>
-        <img src={pokemonLogo} alt="pokemon logo" />
         <StatsContainer>
           <h1>Stats</h1>
           <CardContainer>
             {pokedex.stats?.map(({ stat, base_stat }) => (
-              <Cards key={stat.name} stat={stat} base_stat={base_stat} />
+              <StatCard key={stat.name} stat={stat} base_stat={base_stat} />
             ))}
           </CardContainer>
         </StatsContainer>
@@ -150,22 +169,28 @@ const Statistics: React.FC = () => {
         <EvolutionContainer>
           <h1>Evolution Chain</h1>
           <div>
-            {evolutionChain[0]?.map(({ name }) => (
-              <Banners key={name}>{name}</Banners>
-            ))}
+            {evolutionChain[0]?.length ? (
+              evolutionChain[0]?.map(({ name }) => (
+                <Banners key={name}>{name}</Banners>
+              ))
+            ) : (
+              <p>He is the only one of his specie.</p>
+            )}
           </div>
         </EvolutionContainer>
         <PropertiesContainer>
           <h1>Properties</h1>
           <div>
-            <Banners>
-              {`Height: 
-              ${pokedex.height}`}
-            </Banners>
-            <Banners>
-              {`Weight: 
-              ${pokedex.weight}`}
-            </Banners>
+            {pokedex.height?.measure === 'cm' ? (
+              <Banners>
+                {`Height: ${pokedex.height?.converted}${pokedex.height?.measure}`}
+              </Banners>
+            ) : (
+              <Banners>
+                {`Height: ${pokedex.height?.converted}${pokedex.height?.measure}`}
+              </Banners>
+            )}
+            <Banners>{`Weight: ${pokedex.weight}kg`}</Banners>
           </div>
         </PropertiesContainer>
       </div>

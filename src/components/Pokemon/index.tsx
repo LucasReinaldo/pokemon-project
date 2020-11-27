@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
+import { useParams } from 'react-router-dom';
+import { usePokedex } from '../../context/PokedexContext';
 
 import { api } from '../../services/api';
 import Banners from '../Banners';
@@ -26,21 +28,18 @@ interface PokemonProps {
   types: Type[];
 }
 
+interface RouteParams {
+  name: string;
+}
+
 const Pokemon: React.FC = () => {
-  const [pokemon, setPokemon] = useState({} as PokemonProps);
+  const { pokemon, getPokemon } = usePokedex();
+
+  const { name } = useParams() as RouteParams;
 
   useEffect(() => {
-    api.get('pokemon/vileplume').then((response) => {
-      const { id, name, types, sprites } = response.data;
-
-      setPokemon({
-        id,
-        name,
-        artwork: sprites.other['official-artwork'].front_default,
-        types,
-      });
-    });
-  }, []);
+    getPokemon({ name });
+  }, [getPokemon, name]);
 
   return (
     <Container>

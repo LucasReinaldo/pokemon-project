@@ -18,7 +18,7 @@ interface CardProps {
   };
 }
 
-const Cards = ({ stat, base_stat }: CardProps) => {
+const StatCard = ({ stat, base_stat }: CardProps) => {
   const Icon = useMemo(() => {
     switch (stat.name) {
       case 'hp':
@@ -51,4 +51,4 @@ const Cards = ({ stat, base_stat }: CardProps) => {
   );
 };
 
-export default Cards;
+export default StatCard;
