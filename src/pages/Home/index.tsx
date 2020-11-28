@@ -20,7 +20,7 @@ import {
 } from './styles';
 
 const Home = () => {
-  const { pokedex, loadMore, apiLimit } = usePokedex();
+  const { pokedexList, loadMore, filteredPokemon } = usePokedex();
 
   return (
     <Container>
@@ -30,11 +30,21 @@ const Home = () => {
         <Filters />
         <OverflorContainer>
           <CardContainer>
-            {pokedex.results?.slice(0, apiLimit).map(({ name }) => (
-              <div key={name}>
-                <PokemonCard name={name} />
-              </div>
-            ))}
+            {!filteredPokemon?.length
+              ? pokedexList.results?.map(({ name }) => {
+                  return (
+                    <div key={name}>
+                      <PokemonCard name={name} />
+                    </div>
+                  );
+                })
+              : filteredPokemon?.map(({ name }) => {
+                  return (
+                    <div key={name}>
+                      <PokemonCard name={name} />
+                    </div>
+                  );
+                })}
           </CardContainer>
         </OverflorContainer>
         <ButtonContainer>

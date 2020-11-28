@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import Banners from '../Banners';
 
+import { PokemonName, PokemonProps } from '../../context/PokedexContext';
+
 import { parsedHeight } from '../../utils/parsedHeight';
 import { parsedWeight } from '../../utils/parsedWeight';
 
@@ -16,53 +18,22 @@ import {
   PokemonTypes,
 } from './styles';
 
-interface PokemonName {
-  name: string;
-}
-
-interface Type {
-  type: {
-    name: string;
-  };
-}
-
-interface PokemonProps {
-  id: number;
-  height: {
-    measure: string;
-    converted: number;
-  };
-  weight: number | string;
-  name: string;
-  artwork: string;
-  types: Type[];
-}
-
 const PokemonCard = ({ name }: PokemonName) => {
   const [pokemon, setPokemon] = useState({} as PokemonProps);
 
   useEffect(() => {
     api.get(`/pokemon/${name}`).then((response) => {
-      const {
-        id,
-        name: pokename,
-        types,
-        height,
-        weight,
-        sprites,
-      } = response.data;
+      const { name: pokename, height, weight, sprites } = response.data;
 
       const PokWeight = parsedWeight(weight);
-
       const PokHeight = parsedHeight(height);
 
       setPokemon({
-        id,
+        ...response.data,
+        artwork: sprites.other['official-artwork'].front_default,
+        name: pokename,
         height: PokHeight,
         weight: PokWeight,
-        name: pokename,
-        artwork: sprites.other['official-artwork'].front_default,
-        types,
       });
     });
   }, [name]);

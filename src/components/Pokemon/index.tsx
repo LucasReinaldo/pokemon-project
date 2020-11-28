@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 import { usePokedex } from '../../context/PokedexContext';
 
-import { api } from '../../services/api';
 import Banners from '../Banners';
 
 import {
@@ -14,19 +13,6 @@ import {
   HeaderContainer,
   ArrowContainer,
 } from './styles';
-
-interface Type {
-  type: {
-    name: string;
-  };
-}
-
-interface PokemonProps {
-  id: number;
-  name: string;
-  artwork: string;
-  types: Type[];
-}
 
 interface RouteParams {
   name: string;

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { usePokedex } from '../../context/PokedexContext';
 
 import { Container } from './styles';
 
 const Input: React.FC = () => {
-  // const find = results?.filter(({ name }) => name.includes('kyurem'));
-  // console.log(find);
-
   const [pokemonName, setPokemonName] = useState('');
 
-  console.log(pokemonName);
+  const { searchPokemon } = usePokedex();
+
+  useEffect(() => {
+    searchPokemon({ pokemonName });
+  }, [pokemonName, searchPokemon]);
 
   return (
     <Container>

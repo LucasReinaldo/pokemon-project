@@ -19,17 +19,34 @@ interface PokedexProps {
   }[];
 }
 
-interface PokemonName {
+interface PokedexFilteredProps {
   name: string;
+  url: string;
 }
 
-interface Type {
+export interface PokemonName {
+  [key: string]: string;
+}
+
+export interface Type {
   type: {
     name: string;
   };
 }
 
-interface PokemonProps {
+interface Stats {
+  base_stat: number;
+  stat: {
+    name: string;
+  };
+}
+
+interface NameUrlProps {
+  name?: string;
+  url?: string;
+}
+
+export interface PokemonProps {
   id: number;
   height: {
     measure: string;
@@ -39,13 +56,23 @@ interface PokemonProps {
   name: string;
   artwork: string;
   types: Type[];
+  stats: Stats[];
+  abilities: {
+    ability: {
+      name: string;
+    };
+  }[];
+  species: NameUrlProps;
 }
 
 interface PokedexContextData {
   pokedex: PokedexProps;
+  pokedexList: PokedexProps;
   apiLimit: number;
   pokemon: PokemonProps;
+  filteredPokemon: PokedexFilteredProps[];
   loadMore(): void;
+  searchPokemon(searchName: PokemonName): void;
   getPokemon(name: PokemonName): Promise<void>;
 }
 
@@ -57,26 +84,56 @@ const INITIAL_LIST = 21;
 
 const PokedexProvider: React.FC = ({ children }) => {
   const [pokedex, setPokedex] = useState({} as PokedexProps);
+  const [pokedexList, setPokedexList] = useState({} as PokedexProps);
   const [pokemon, setPokemon] = useState({} as PokemonProps);
+  const [filteredPokemon, setFilteredPokemon] = useState<
+    PokedexFilteredProps[]
+  >([]);
   const [apiLimit, setApiLimit] = useState(INITIAL_LIST);
+
+  const loadMore = useCallback(() => {
+    setApiLimit(apiLimit + INITIAL_LIST);
+  }, [apiLimit]);
+
+  useEffect(() => {
+    const getPokemonsList = async () => {
+      const response = await api.get('/pokemon', {
+        params: {
+          limit: apiLimit,
+        },
+      });
+
+      setPokedexList(response.data);
+    };
+    getPokemonsList();
+  }, [apiLimit]);
 
   useEffect(() => {
     const getAllPokemons = async () => {
       const response = await api.get('/pokemon', {
         params: {
-          limit: pokedex.count,
+          limit: pokedex?.count,
         },
       });
 
       setPokedex(response.data);
     };
     getAllPokemons();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiLimit]);
+  }, [pokedex?.count]);
 
-  const loadMore = useCallback(() => {
-    setApiLimit(apiLimit + INITIAL_LIST);
-  }, [apiLimit]);
+  const searchPokemon = useCallback(
+    ({ pokemonName }: PokemonName) => {
+      if (pokemonName.length >= 3) {
+        const results = pokedex.results?.filter(({ name }) =>
+          name.includes(pokemonName.toLocaleLowerCase()),
+        );
+        setFilteredPokemon(results);
+      } else {
+        setFilteredPokemon([]);
+      }
+    },
+    [pokedex.results],
+  );
 
   const getPokemon = useCallback(async ({ name }: PokemonName): Promise<
     void
@@ -89,6 +146,9 @@ const PokedexProvider: React.FC = ({ children }) => {
         height,
         weight,
         sprites,
+        stats,
+        abilities,
+        species,
       } = response.data;
 
       const PokWeight = parsedWeight(weight);
@@ -102,13 +162,25 @@ const PokedexProvider: React.FC = ({ children }) => {
         name: pokename,
         artwork: sprites.other['official-artwork'].front_default,
         types,
+        stats,
+        abilities,
+        species,
       });
     });
   }, []);
 
   return (
     <PokedexContext.Provider
-      value={{ pokedex, apiLimit, pokemon, loadMore, getPokemon }}
+      value={{
+        pokedex,
+        pokedexList,
+        apiLimit,
+        pokemon,
+        filteredPokemon,
+        loadMore,
+        getPokemon,
+        searchPokemon,
+      }}
     >
       {children}
     </PokedexContext.Provider>
