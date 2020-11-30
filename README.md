@@ -14,6 +14,8 @@ I also implemented context to share data between the tree of React components.
 [x] Typescript
 [x] ReactJS
 [x] Styled Components
+[x] ESLint
+[x] Prettier
 
 
 ## 📚 How To Use
