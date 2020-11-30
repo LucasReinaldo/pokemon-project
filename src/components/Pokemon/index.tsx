@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import React, { useEffect } from 'react';
-import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 import { usePokedex } from '../../context/PokedexContext';
 
