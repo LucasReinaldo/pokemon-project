@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Card = styled.div`
+interface ElementColorProps {
+  color: string;
+}
+
+export const Card = styled.div<ElementColorProps>`
   display: flex;
   flex-direction: row;
   border-radius: 8px;
@@ -8,7 +12,7 @@ export const Card = styled.div`
   height: 130px;
   padding: 4px;
   color: #000;
-  background-color: tomato;
+  background-color: ${(props) => props.color};
   position: relative;
   flex: 1 1;
   cursor: pointer;
@@ -65,7 +69,7 @@ export const Name = styled.h1`
   color: #fff;
 `;
 
-export const PokemonTypes = styled.span`
+export const PokemonTypesName = styled.span`
   display: flex;
   flex-direction: row;
   margin: auto;

@@ -34,18 +34,17 @@ const Pokemon: React.FC = () => {
           <h1>{pokemon.name}</h1>
           <TypeContainer>
             <div>
-              {pokemon.types?.map(({ type }) => (
-                <Banners key={type.name}>{type.name}</Banners>
+              {pokemon?.types?.map(({ name: typeName, icon }) => (
+                <Banners key={typeName} icon={icon}>
+                  {typeName}
+                </Banners>
               ))}
             </div>
           </TypeContainer>
           <span>{`#${pokemon.id}`}</span>
         </HeaderContainer>
         <img src={pokemon.artwork} alt="pokemon img" />
-        <ArrowContainer>
-          <VscArrowDown size={24} />
-          <VscArrowUp size={24} />
-        </ArrowContainer>
+        <ArrowContainer />
       </PokemonContainer>
     </Container>
   );

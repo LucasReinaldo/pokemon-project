@@ -19,6 +19,19 @@ export const LeftContainer = styled.div`
   margin: 0 auto;
   width: 90%;
   color: var(--text-color-primary);
+
+  > svg {
+    background-color: var(--poke-quaternary-color);
+    color: var(--text-color);
+    border-radius: 50%;
+    height: 28px;
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    cursor: pointer;
+  }
 `;
 
 export const RightContainer = styled.div`

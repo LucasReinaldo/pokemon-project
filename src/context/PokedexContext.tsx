@@ -1,15 +1,21 @@
 import React, {
   createContext,
+  SVGProps,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
 
-import { api } from '../services/api';
+import { useTheme } from 'styled-components';
+import PokemonTypes from '../assets/PokemonTypes';
+
+import artworkImg from '../assets/whos-that-pokemon.png';
 
 import { parsedHeight } from '../utils/parsedHeight';
 import { parsedWeight } from '../utils/parsedWeight';
+
+import { api } from '../services/api';
 
 interface PokedexProps {
   count: number;
@@ -28,9 +34,15 @@ export interface PokemonName {
   [key: string]: string;
 }
 
+export interface PokemonTypesProps {
+  name?: string;
+  icon: SVGProps<SVGSVGElement>;
+  color: string;
+}
+
 export interface Type {
   type: {
-    name: string;
+    name: keyof typeof PokemonTypes;
   };
 }
 
@@ -55,7 +67,7 @@ export interface PokemonProps {
   weight: number | string;
   name: string;
   artwork: string;
-  types: Type[];
+  types: PokemonTypesProps[];
   stats: Stats[];
   abilities: {
     ability: {
@@ -83,6 +95,8 @@ const PokedexContext = createContext<PokedexContextData>(
 const INITIAL_LIST = 21;
 
 const PokedexProvider: React.FC = ({ children }) => {
+  const { colors } = useTheme();
+
   const [pokedex, setPokedex] = useState({} as PokedexProps);
   const [pokedexList, setPokedexList] = useState({} as PokedexProps);
   const [pokemon, setPokemon] = useState({} as PokemonProps);
@@ -135,39 +149,54 @@ const PokedexProvider: React.FC = ({ children }) => {
     [pokedex.results],
   );
 
-  const getPokemon = useCallback(async ({ name }: PokemonName): Promise<
-    void
-  > => {
-    api.get(`/pokemon/${name}`).then((response) => {
-      const {
-        id,
-        name: pokename,
-        types,
-        height,
-        weight,
-        sprites,
-        stats,
-        abilities,
-        species,
-      } = response.data;
+  const getPokemon = useCallback(
+    async ({ name }: PokemonName): Promise<void> => {
+      api.get(`/pokemon/${name}`).then((response) => {
+        const {
+          id,
+          name: pokename,
+          types,
+          height,
+          weight,
+          sprites,
+          stats,
+          abilities,
+          species,
+        } = response.data;
 
-      const PokWeight = parsedWeight(weight);
+        const PokWeight = parsedWeight(weight);
 
-      const PokHeight = parsedHeight(height);
+        const PokHeight = parsedHeight(height);
 
-      setPokemon({
-        id,
-        height: PokHeight,
-        weight: PokWeight,
-        name: pokename,
-        artwork: sprites.other['official-artwork'].front_default,
-        types,
-        stats,
-        abilities,
-        species,
+        let setArtwork =
+          sprites.other['official-artwork'].front_default ||
+          sprites.front_default;
+
+        if (setArtwork === null) {
+          setArtwork = artworkImg;
+        }
+
+        const setType = types.map((pokemonType: Type) => ({
+          name: pokemonType.type.name,
+          icon: PokemonTypes[pokemonType.type.name],
+          color: colors.type[pokemonType.type.name],
+        }));
+
+        setPokemon({
+          id,
+          height: PokHeight,
+          weight: PokWeight,
+          name: pokename,
+          artwork: setArtwork,
+          types: setType,
+          stats,
+          abilities,
+          species,
+        });
       });
-    });
-  }, []);
+    },
+    [colors],
+  );
 
   return (
     <PokedexContext.Provider

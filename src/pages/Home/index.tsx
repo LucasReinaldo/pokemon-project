@@ -4,7 +4,6 @@ import React from 'react';
 import imgHome from '../../assets/ash.png';
 import Input from '../../components/Input';
 import PokemonCard from '../../components/PokemonCard';
-import Filters from '../../components/Filters';
 
 import pokemonLogo from '../../assets/pokemon-logo.svg';
 
@@ -27,7 +26,6 @@ const Home = () => {
       <LeftContainer>
         <img src={pokemonLogo} alt="pokemon logo" />
         <Input />
-        <Filters />
         <OverflorContainer>
           <CardContainer>
             {!filteredPokemon?.length
