@@ -1,7 +1,3 @@
-Hey there!
-
-
-
 <h1 align="center">PokéAPI - LucasReinaldo Style :)</h1>
 
 <h1 align="center">
